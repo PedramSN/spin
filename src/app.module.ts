@@ -6,6 +6,7 @@ import { TypeOrmDbConfig } from './config/typeorm-db-config';
 import { UserModule } from './modules/user/user.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { ProjectModule } from './modules/project/project.module';
+import { WheelModule } from './modules/wheel/wheel.module';
 
 @Module({
   imports: [
@@ -25,6 +26,8 @@ import { ProjectModule } from './modules/project/project.module';
     AuthModule,
 
     ProjectModule,
+
+    WheelModule,
   ],
 
   

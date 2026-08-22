@@ -1,8 +1,10 @@
 import { entityNames } from 'src/common/enums/entityNames.enum';
+import { Wheel } from 'src/modules/wheel/entities/wheel.entity';
 import {
     Column,
     CreateDateColumn,
     Entity,
+    OneToMany,
     PrimaryColumn,
     UpdateDateColumn,
   } from 'typeorm';
@@ -24,6 +26,12 @@ import {
       default: true,
     })
     isActive: boolean;
+
+    @OneToMany(
+        () => Wheel,
+        (wheel) => wheel.project,
+      )
+      wheels: Wheel[];
   
     @CreateDateColumn()
     createdAt: Date;
