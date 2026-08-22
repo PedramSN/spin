@@ -3,6 +3,8 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { configurations } from './config/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { TypeOrmDbConfig } from './config/typeorm-db-config';
+import { UserModule } from './modules/user/user.module';
+import { AuthModule } from './modules/auth/auth.module';
 
 @Module({
   imports: [
@@ -16,6 +18,10 @@ import { TypeOrmDbConfig } from './config/typeorm-db-config';
       useClass: TypeOrmDbConfig,
       inject: [ConfigService],
     }),
+
+    UserModule,
+
+    AuthModule,
   ],
 
   

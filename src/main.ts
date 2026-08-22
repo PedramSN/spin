@@ -6,6 +6,7 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { Request, Response } from 'express';
 import { TransformInterceptor } from './common/interceptors/transform.interceptor';
 import { AllExceptionsFilter } from './common/filters/exceptions.filter';
+import { User } from './modules/user/entities/user.entity';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -40,8 +41,10 @@ async function bootstrap() {
   app.useGlobalFilters(new AllExceptionsFilter())
 
   const swaggerConfig = new DocumentBuilder()
-    .setTitle('product-manage')
-    .setDescription('.........')
+    .setTitle('Spin')
+    .setDescription('spin project')
+    .addTag("Auth")
+    .addTag("Users")
     .addBearerAuth()
     .setVersion('1.0.0')
 
