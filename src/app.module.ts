@@ -8,6 +8,7 @@ import { AuthModule } from './modules/auth/auth.module';
 import { ProjectModule } from './modules/project/project.module';
 import { WheelModule } from './modules/wheel/wheel.module';
 import { WheelItemModule } from './modules/wheel-item/wheel-item.module';
+import { CodeModule } from './modules/code/code.module';
 
 @Module({
   imports: [
@@ -31,6 +32,8 @@ import { WheelItemModule } from './modules/wheel-item/wheel-item.module';
     WheelModule,
 
     WheelItemModule,
+
+    CodeModule,
   ],
 
   
