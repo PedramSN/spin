@@ -13,7 +13,7 @@ async function bootstrap() {
   const configService = app.get(ConfigService);
   const server = app.getHttpAdapter().getInstance();
 
-  const port = configService.get('app.port');
+  const port = configService.get('app.port') || 3000;
 
   app.enableCors({
     origin: '*',
@@ -56,12 +56,10 @@ async function bootstrap() {
     res.json(document);
   });
 
-  await app.listen(port, () => {
-    console.log(`Server listening on port ${port}...`);
-    console.log(`Swagger UI available at http://localhost:${port}/docs`);
-    console.log(
-      `Swagger JSON available at http://localhost:${port}/swagger/json`,
-    );
+  await app.listen(Number(port), '0.0.0.0', () => {
+    console.log(`Server listening on port ${port}`);
+
+    console.log(`Swagger UI available at /docs`);
   });
 }
 bootstrap();
