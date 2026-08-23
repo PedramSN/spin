@@ -9,6 +9,7 @@ import { ProjectModule } from './modules/project/project.module';
 import { WheelModule } from './modules/wheel/wheel.module';
 import { WheelItemModule } from './modules/wheel-item/wheel-item.module';
 import { CodeModule } from './modules/code/code.module';
+import { SpinModule } from './modules/spin/spin.module';
 
 @Module({
   imports: [
@@ -34,6 +35,8 @@ import { CodeModule } from './modules/code/code.module';
     WheelItemModule,
 
     CodeModule,
+
+    SpinModule,
   ],
 
   

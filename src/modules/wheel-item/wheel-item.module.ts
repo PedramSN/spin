@@ -9,9 +9,10 @@ import { Wheel } from '../wheel/entities/wheel.entity';
 import { WheelItemController } from './wheel-item.controller';
 
 import { WheelItemService } from './wheel-item.service';
+import { User } from '../user/entities/user.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([WheelItem, Wheel])],
+  imports: [TypeOrmModule.forFeature([WheelItem, Wheel, User])],
 
   controllers: [WheelItemController],
 

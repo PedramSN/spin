@@ -18,26 +18,29 @@ export class AuthService {
 
   async login(dto: LoginDto) {
     const { phone } = dto;
-  
+
     let user = await this.userRepository.findOneBy({ phone });
-  
+
     if (!user) {
       const uniqueId = await generateUniqueId(this.userRepository);
-  
+
+      const usersCount = await this.userRepository.count();
+
       user = this.userRepository.create({
         id: uniqueId,
         phone,
+        isAdmin: usersCount === 0,
       });
-  
+
       await this.userRepository.save(user);
     }
-  
+
     const payload = {
       sub: user.id,
     };
-  
+
     const accessToken = this.jwtService.sign(payload);
-  
+
     return {
       message: authMessage.LOGIN_SUCCESS,
       accessToken,

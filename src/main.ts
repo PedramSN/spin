@@ -44,7 +44,6 @@ async function bootstrap() {
     .setTitle('Spin')
     .setDescription('spin project')
     .addTag("Auth")
-    .addTag("Users")
     .addBearerAuth()
     .setVersion('1.0.0')
 

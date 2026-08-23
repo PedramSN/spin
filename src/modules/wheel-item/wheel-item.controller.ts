@@ -7,33 +7,31 @@ import {
   ParseIntPipe,
   Patch,
   Post,
+  UseGuards,
 } from '@nestjs/common';
 
-import {
-  ApiOperation,
-  ApiTags,
-} from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 
 import { WheelItemService } from './wheel-item.service';
 
 import { CreateWheelItemDto } from './dto/create-wheel-item.dto';
 
 import { UpdateWheelItemDto } from './dto/update-wheel-item.dto';
+import { AuthGuard } from 'src/common/guards/auth.guard';
+import { IsAdminGuard } from 'src/common/guards/is-admin.guard';
 
 @ApiTags('Wheel Item')
 @Controller('wheel-items')
+@ApiBearerAuth()
+@UseGuards(AuthGuard, IsAdminGuard)
 export class WheelItemController {
-  constructor(
-    private readonly wheelItemService: WheelItemService,
-  ) {}
+  constructor(private readonly wheelItemService: WheelItemService) {}
 
   @Post()
   @ApiOperation({
     summary: 'ایجاد آیتم گردونه',
   })
-  create(
-    @Body() dto: CreateWheelItemDto,
-  ) {
+  create(@Body() dto: CreateWheelItemDto) {
     return this.wheelItemService.create(dto);
   }
 
@@ -65,10 +63,7 @@ export class WheelItemController {
     id: number,
     @Body() dto: UpdateWheelItemDto,
   ) {
-    return this.wheelItemService.update(
-      id,
-      dto,
-    );
+    return this.wheelItemService.update(id, dto);
   }
 
   @Delete(':id')

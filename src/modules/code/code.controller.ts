@@ -7,33 +7,31 @@ import {
   ParseIntPipe,
   Patch,
   Post,
+  UseGuards,
 } from '@nestjs/common';
 
-import {
-  ApiOperation,
-  ApiTags,
-} from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 
 import { CodeService } from './code.service';
 
 import { CreateCodeDto } from './dto/create-code.dto';
 
 import { UpdateCodeDto } from './dto/update-code.dto';
+import { AuthGuard } from 'src/common/guards/auth.guard';
+import { IsAdminGuard } from 'src/common/guards/is-admin.guard';
 
 @ApiTags('Code')
 @Controller('codes')
+@ApiBearerAuth()
+@UseGuards(AuthGuard, IsAdminGuard)
 export class CodeController {
-  constructor(
-    private readonly codeService: CodeService,
-  ) {}
+  constructor(private readonly codeService: CodeService) {}
 
   @Post()
   @ApiOperation({
     summary: 'ایجاد کد',
   })
-  create(
-    @Body() dto: CreateCodeDto,
-  ) {
+  create(@Body() dto: CreateCodeDto) {
     return this.codeService.create(dto);
   }
 
@@ -65,10 +63,7 @@ export class CodeController {
     id: number,
     @Body() dto: UpdateCodeDto,
   ) {
-    return this.codeService.update(
-      id,
-      dto,
-    );
+    return this.codeService.update(id, dto);
   }
 
   @Delete(':id')

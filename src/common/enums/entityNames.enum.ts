@@ -3,5 +3,6 @@ export enum entityNames {
   Project = "projects",
   Wheel = "wheels",
   Wheel_Item = "wheel-items",
-  Code = "codes"
+  Code = "codes",
+  Spin = "spins"
 }

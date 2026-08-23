@@ -15,6 +15,11 @@ import {
   
     @Column({ unique: true })
     phone: string;
+
+    @Column({
+      default: false,
+    })
+    isAdmin: boolean;
   
     @CreateDateColumn()
     createdAt: Date;
