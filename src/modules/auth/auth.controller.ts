@@ -1,37 +1,65 @@
 import {
-  Body,
   Controller,
+  Get,
   Post,
+  Query,
+  Req,
+  Redirect,
+  Body,
 } from '@nestjs/common';
-import {
-  ApiOperation,
-  ApiResponse,
-  ApiTags,
-} from '@nestjs/swagger';
+import type { Request } from 'express';
+import { ApiOperation, ApiTags } from '@nestjs/swagger';
 
 import { AuthService } from './auth.service';
-import { LoginDto } from './dto/login.dto';
 
 @ApiTags('Auth')
 @Controller('auth')
 export class AuthController {
-  constructor(
-    private readonly authService: AuthService,
-  ) {}
+  constructor(private readonly authService: AuthService) {}
 
-  @Post('login')
+  @Get('login')
+  @Redirect()
   @ApiOperation({
-    summary: 'Login user',
+    summary: 'Redirect to SSO login',
   })
-  @ApiResponse({
-    status: 200,
-    description: 'ورود با موفقیت انجام شد.',
-  })
-  @ApiResponse({
-    status: 400,
-    description: 'شماره موبایل نامعتبر است.',
-  })
-  async login(@Body() dto: LoginDto) {
-    return this.authService.login(dto);
+  login(@Query('next') next?: string) {
+    return { url: this.authService.getAuthorizationUrl(next || '/') };
+  }
+
+  @Get('callback')
+  @ApiOperation({ summary: 'Handle SSO callback' })
+  async callback(
+    @Query('code') code?: string,
+    @Query('state') state?: string,
+    @Query('error') error?: string,
+    @Req() request?: Request,
+  ) {
+    if (error) {
+      if (request?.headers.accept?.includes('application/json')) {
+        return { error };
+      }
+      const callbackUrl = new URL(this.authService.getFrontendCallbackUrl());
+      callbackUrl.searchParams.set('error', error);
+      return { url: callbackUrl.toString() };
+    }
+
+    const result = await this.authService.loginWithCode(code || '', state);
+    if (request?.headers.accept?.includes('application/json')) {
+      return result;
+    }
+
+    const callbackUrl = new URL(this.authService.getFrontendCallbackUrl());
+    callbackUrl.searchParams.set('access_token', result.accessToken);
+    callbackUrl.searchParams.set('next', result.next);
+    return { url: callbackUrl.toString() };
+  }
+
+  @Post('callback')
+  @ApiOperation({ summary: 'Exchange SSO authorization code for app token' })
+  async callbackApi(
+    @Body('code') code?: string,
+    @Body('state') state?: string,
+  ) {
+    return this.authService.loginWithCode(code || '', state);
   }
 }
